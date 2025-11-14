@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-ihnsubfinder.py - Super-powered single-file subdomain enumerator (async, cache, smart parser).
+subihnder.py - Super-powered single-file subdomain enumerator (async, cache, smart parser).
 
 Features:
  - Async fetchers: crt.sh, OTX (AlienVault), urlscan.io, Wayback CDX
  - Optional: subfinder, assetfinder, shodanx (if in PATH) via subprocess
  - Concurrency control
- - Per-domain cache directory (~/.cache/ihnsubfinder)
+ - Per-domain cache directory (~/.cache/subihnder)
  - Normalizer using tldextract if available, fallback to regex
  - Robust JSON/text parsing, retries, timeouts
  - Single output file: subdomains.txt (one domain per line, sorted unique)
@@ -20,9 +20,9 @@ Requirements:
    (aiodns speeds DNS but not required)
 
 Usage examples:
-  python3 ihnsubfinder.py example.com
-  python3 ihnsubfinder.py -l domains.txt -p 20 --keep-cache
-  python3 ihnsubfinder.py example.com --skip-subfinder --no-color
+  python3 subihnder.py example.com
+  python3 subihnder.py -l domains.txt -p 20 --keep-cache
+  python3 subihnder.py example.com --skip-subfinder --no-color
 
 Author: converted for Ihsan (design + features requested)
 """
@@ -62,8 +62,8 @@ except Exception:
 # -------------------------
 DEFAULT_CONCURRENCY = 8
 DEFAULT_OUTFILE = "subdomains.txt"
-DEFAULT_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "ihnsubfinder")
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) ihnsubfinder/1.0"
+DEFAULT_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "subihnder")
+USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) subihnder/1.0"
 DEFAULT_TIMEOUT = 20
 DEFAULT_RETRIES = 3
 
@@ -468,7 +468,7 @@ class Enumerator:
 # CLI and main
 # -------------------------
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="ihnsubfinder.py - Async, cached, smart subdomain enumeration (single-file)")
+    p = argparse.ArgumentParser(description="subihnder.py - Async, cached, smart subdomain enumeration (single-file)")
     p.add_argument("domains", nargs="*", help="one or more target domains")
     p.add_argument("-l", "--list", dest="listfile", help="file containing domains (one per line)")
     p.add_argument("-p", "--concurrency", type=int, default=DEFAULT_CONCURRENCY, help="concurrency (xargs / aiohttp semaphore)")
