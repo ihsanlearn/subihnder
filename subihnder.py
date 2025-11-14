@@ -24,7 +24,7 @@ Usage examples:
   python3 subihnder.py -l domains.txt -p 20 --keep-cache
   python3 subihnder.py example.com --skip-subfinder --no-color
 
-Author: converted for Ihsan (design + features requested)
+Author: converted for iihhn (design + features requested)
 """
 from __future__ import annotations
 import argparse
@@ -86,6 +86,41 @@ def ensure_dir(path: str):
 
 def now_ts() -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S")
+
+def print_banner(args: argparse.Namespace, no_color: bool = False):
+    VERSION = "1.0"
+    AUTHOR = "iihhn"
+
+    banner_art = r"""
+            ___.   .__.__                .___            
+  ________ _\_ |__ |__|  |__   ____    __| _/___________ 
+ /  ___/  |  \ __ \|  |  |  \ /    \  / __ |/ __ \_  __ \
+ \___ \|  |  / \_\ \  |   Y  \   |  \/ /_/ \  ___/|  | \/
+/____  >____/|___  /__|___|  /___|  /\____ |\___  >__|   
+     \/          \/        \/     \/      \/    \/       
+"""
+    if no_color or not COLOR_OK:
+        eprint(banner_art)
+        eprint(f"      v{VERSION} by {AUTHOR}\n")
+        eprint("[*] Starting enumeration...")
+        eprint(f"    Concurrency: {args.concurrency}")
+        eprint(f"    Output: {args.output}")
+        eprint(f"    Cache dir: {args.cache_dir}  (keep_cache={args.keep_cache})")
+    else:
+        eprint(colored(banner_art, Fore.YELLOW))
+        eprint(colored(f"      v{VERSION} by {AUTHOR}\n", Fore.YELLOW))
+        eprint(colored("[*]", Fore.BLUE) + " Starting enumeration...")
+        eprint(colored("    Concurrency: ", Fore.GREEN) + str(args.concurrency))
+        eprint(colored("    Output: ", Fore.GREEN) + args.output)
+        eprint(colored("    Cache dir: ", Fore.GREEN) + f"{args.cache_dir}  (keep_cache={args.keep_cache})")
+
+    # Cek external tools
+    sf_stat = colored("Found", Fore.GREEN) if shutil.which('subfinder') else colored("Nothing", Fore.RED)
+    af_stat = colored("Found", Fore.GREEN) if shutil.which('assetfinder') else colored("Nothing", Fore.RED)
+    sx_stat = colored("Found", Fore.GREEN) if shutil.which('shodanx') else colored("Nothing", Fore.RED)
+
+    eprint(colored("    Tools: ", Fore.GREEN) + f"subfinder=({sf_stat}), assetfinder=({af_stat}), shodanx=({sx_stat})")
+    eprint("-" * 40)
 
 # Normalize domain-like strings
 def normalize_candidate(raw: str) -> Optional[str]:
@@ -489,7 +524,7 @@ async def main_async(args: argparse.Namespace):
     domains: List[str] = []
     if args.listfile:
         if not os.path.isfile(args.listfile):
-            eprint("[!] List file not found:", args.listfile)
+            eprint(colored("[!]", Fore.RED), "List file not found:", args.listfile)
             sys.exit(1)
         with open(args.listfile, "r", encoding="utf-8") as fh:
             for l in fh:
@@ -507,11 +542,8 @@ async def main_async(args: argparse.Namespace):
     domains = [d for d in domains if d]  # drop None
 
     # report initial config
-    eprint(colored("[*] Starting ihmsubfinder (Python)", Fore.BLUE) if COLOR_OK else "[*] Starting ihmsubfinder (Python)")
-    eprint(f"    Concurrency: {args.concurrency}")
-    eprint(f"    Output: {args.output}")
-    eprint(f"    Cache dir: {args.cache_dir}  (keep_cache={args.keep_cache})")
-    eprint(f"    External tools: subfinder={'yes' if shutil.which('subfinder') else 'no'}, assetfinder={'yes' if shutil.which('assetfinder') else 'no'}, shodanx={'yes' if shutil.which('shodanx') else 'no'}")
+    print_banner(args, no_color=args.no_color)
+
     tmpdir = tempfile.mkdtemp(prefix="ihnsub.XXXXXX")
     ensure_dir(args.cache_dir)
 
@@ -558,7 +590,7 @@ async def main_async(args: argparse.Namespace):
             for d in cleaned:
                 fh.write(d + "\n")
     except Exception as e:
-        eprint("[!] Failed to write output:", e)
+        eprint(colored("[!]", Fore.RED), "Failed to write output:", e)
         sys.exit(1)
 
     # Final report
@@ -566,11 +598,6 @@ async def main_async(args: argparse.Namespace):
     eprint(colored("[✔] Done.", Fore.GREEN) if COLOR_OK else "[✔] Done.")
     eprint(f"    Total unique subdomains: {total}")
     eprint(f"    Saved to: {os.path.abspath(args.output)}")
-    # optionally print sample to stderr
-    if total > 0:
-        eprint("    Sample (first 20):")
-        for s in cleaned[:20]:
-            eprint("      " + s)
 
 def main():
     args = parse_args()
@@ -581,10 +608,10 @@ def main():
     try:
         asyncio.run(main_async(args))
     except KeyboardInterrupt:
-        eprint("\n[!] Interrupted by user")
+        eprint(colored("\n[!] Interrupted by user", Fore.YELLOW))
         sys.exit(1)
     except Exception as e:
-        eprint("[!] Fatal error:", e)
+        eprint(colored("\n[!]", Fore.RED), "Fatal error:", e)
         raise
 
 if __name__ == "__main__":
