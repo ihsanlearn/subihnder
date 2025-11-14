@@ -107,8 +107,8 @@ def print_banner(args: argparse.Namespace, no_color: bool = False):
         eprint(f"    Output: {args.output}")
         eprint(f"    Cache dir: {args.cache_dir}  (keep_cache={args.keep_cache})")
     else:
-        eprint(colored(banner_art, Fore.YELLOW))
-        eprint(colored(f"      v{VERSION} by {AUTHOR}\n", Fore.YELLOW))
+        eprint(colored(banner_art, Fore.RED))
+        eprint(colored(f"      v{VERSION} by {AUTHOR}\n", Fore.RED))
         eprint(colored("[*]", Fore.BLUE) + " Starting enumeration...")
         eprint(colored("    Concurrency: ", Fore.GREEN) + str(args.concurrency))
         eprint(colored("    Output: ", Fore.GREEN) + args.output)
