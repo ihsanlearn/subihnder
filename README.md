@@ -1,219 +1,112 @@
-# subihnder.py  
-High-Performance Asynchronous Subdomain Enumeration Toolkit  
-Single-file, fast, extensive, and designed for serious recon workflows.
+<pre align="left">
+            ___.   .__.__                .___            
+  ________ _\_ |__ |__|  |__   ____    __| _/___________ 
+ /  ___/  |  \ __ \|  |  |  \ /    \  / __ |/ __ \_  __ \
+ \___ \|  |  / \_\ \  |   Y  \   |  \/ /_/ \  ___/|  | \/
+/____  >____/|___  /__|___|  /___|  /\____ |\___  >__|   
+     \/          \/        \/     \/      \/    \/       
+</pre>
+<p align="center">
+  <strong>High-Performance Asynchronous Subdomain Enumerator</strong>
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT">
+  <img src="https://img.shields.io/badge/Owner-Ihsan-red?style=for-the-badge" alt="Owner: iihhn">
+  <img src="https://img.shields.io/badge/Async-Powered-purple?style=for-the-badge&logo=python" alt="Async Powered">
+</p>
+
+<p align="center">
+  A high-performance passive subdomain enumeration tool written in Python 3.10+.<br>
+  It focuses on high-speed async operations, multi-source aggregation, and robust normalization.<br>
+  Built for legal and authorized cybersecurity research, OSINT, and recon workflows.
+</p>
 
 ---
 
-## Overview
+## ✨ Features
 
-`subihnder.py` is a high-performance passive subdomain enumeration tool written in Python 3.10+.  
-It focuses on:
+* **🚀 High-Speed Async Engine:** Fully asynchronous using `asyncio` and `aiohttp` with connection pooling, retries, and per-source timeouts.
+* **🧩 Multi-Source Aggregation:** Gathers data from numerous passive sources:
+    * crt.sh (JSON)
+    * AlienVault OTX
+    * urlscan.io
+    * Wayback Machine (CDX API)
+* **🔌 External Tool Integration:** Automatically detects and uses `subfinder` and `assetfinder` (if present in `$PATH`) for expanded results.
+* **🧠 Smart Caching System:** Caches per-domain results in `~/.cache/subihnder/` to speed up subsequent scans. Can be enabled with `--keep-cache`.
+* **🛡️ Intelligent Normalization:** Robustly cleans and validates findings:
+    * Strips wildcards (`*.example.com`)
+    * Extracts hostnames from URLs and JSON blobs
+    * Enforces lowercase and regex validation
+    * Deduplicates all findings into one final list.
+* **📊 Clean & Clear Output:** Provides live progress updates to `stderr` while writing the final, clean, sorted list to `subdomains.txt` (or a custom file).
 
-- High-speed asynchronous operations (asyncio + aiohttp)  
-- Multi-source aggregation  
-- Relaxed-but-robust error handling  
-- Subdomain normalization and validation  
-- Clean, single-file final output (`subdomains.txt`)  
-
-It is built for cybersecurity research, OSINT, reconnaissance, and infrastructure mapping — only for **legal and authorized usage**.
-
----
-
-## Features
-
-### Asynchronous Engine
-- Fully asynchronous with connection pooling  
-- Built on `aiohttp` and `asyncio`  
-- Per-source timeouts and retry logic  
-
-### Multi-Source Passive Enumeration
-Includes the following providers:
-
-- crt.sh  
-- AlienVault OTX  
-- urlscan.io  
-- Wayback Machine (CDX API)  
-- Subfinder (optional, if installed)  
-- Assetfinder (optional, if installed)
-
-### Smart Caching System
-- Cache stored in `~/.cache/subihnder/`  
-- Optional flags:  
-  - `--no-cache` (disable cache completely)  
-  - `--refresh` (force refresh per-domain)
-
-### Intelligent Normalization
-- Removes wildcards (`*.example.com`)  
-- Extracts hostnames from URLs  
-- Lowercase enforcement  
-- Regex-based validation  
-- Deduplication across all sources
-
-### Optimized Runtime Output
-- Structured progress indicators  
-- Completion badges per source  
-- Summary and unique count  
-- Clean logging separation from final output
-
-### Clean Final Output
-Results always end in:
-
-```
-subdomains.txt
-```
-
-Contains deduplicated, sanitized, sorted subdomains.
-
----
-
-## Installation
+## 🚀 Installation
 
 ### 1. Clone Repository
-
-```
-git clone https://github.com/<yourusername>/subihnder
+```bash
+git clone [https://github.com/ihsanlearn/subihnder](https://github.com/ihsanlearn/subihnder)
 cd subihnder
 ```
-
 ### 2. Install Python Dependencies
+It's recommended to use a virtual environment.
 
-Use:
-
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+Install requirements:
 ```
+
+```bash
 pip install -r requirements.txt
 ```
-
 Or manually:
 
-```
-pip install aiohttp aiodns tldextract colorama rich
-```
-
-(“rich” is optional but recommended for improved console UI.)
-
-### 3. Optional External Tools
-
-If installed, they will be auto-detected:
-
-- subfinder  
-- assetfinder  
-
-They are not required, but useful for extended enumeration.
-
----
-
-## Usage
-
-### Enumerate a Single Domain
-
-```
-python3 subihnder.py -d example.com
+```bash
+pip install aiohttp tldextract colorama
 ```
 
-### Read Domains from List File
+### 3. (Optional but recommended) Install External Tools
+For the best results, install these tools and ensure they are in your $PATH:
+- subfinder
+- assetfinder
 
+The script will automatically detect and use them if they are available.
+
+💻 **Usage**
+
+Enumerate a Single Domain
+```bash
+python3 subihnder.py example.com
 ```
+
+Enumerate Multiple Domains
+```bash
+python3 subihnder.py example.com another.com
+```
+
+Read Domains from a List File
+```bash
 python3 subihnder.py -l domains.txt
 ```
 
-### Increase Concurrency (default = 50)
-
-```
-python3 subihnder.py -d example.com -p 200
-```
-
-### Disable Cache
-
-```
-python3 subihnder.py -d example.com --no-cache
+Increase Concurrency (Default: 8)
+```bash
+python3 subihnder.py -l domains.txt -p 20
 ```
 
-### Force Refresh Cache
-
-```
-python3 subihnder.py -d example.com --refresh
-```
-
-### Custom Output Filename
-
-```
-python3 subihnder.py -d example.com -o results.txt
+Enable Caching
+By default, the cache is not written. Use --keep-cache to save and re-use results from ~/.cache/subihnder/.
+```bash
+python3 subihnder.py example.com --keep-cache
 ```
 
----
-
-## Example Output (Runtime)
-
-```
-[CRT]        ✔ 94 found
-[OTX]        ✔ 41 found
-[URLSCAN]    ✔ 66 found
-[WAYBACK]    ✔ 120 found
-[SUBFINDER]  ✔ 38 found
----------------------------------------
-[MERGE]      185 unique subdomains
+Specify Output File
+```bash
+python3 subihnder.py example.com -o results.txt
 ```
 
-The final file:
-
+Skip External Tools
+```bash
+python3 subihnder.py example.com --skip-subfinder --skip-assetfinder
 ```
-subdomains.txt
-```
-
-Example content:
-
-```
-api.example.com
-dev.example.com
-cdn.example.com
-m.example.com
-static.example.com
-```
-
----
-
-## Directory Structure
-
-```
-subihnder/
-│
-├── subihnder.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Requirements
-
-- Python 3.10 or newer  
-- Internet connection  
-- (Optional) subfinder, assetfinder  
-
----
-
-## Legal Notice
-
-This tool is intended exclusively for:
-
-- lawful cybersecurity testing  
-- internal security audits  
-- OSINT research  
-- penetration testing **with explicit permission**  
-- experimentation within your own environment  
-
-Unauthorized scanning of external infrastructure is illegal.
-
----
-
-## License
-
-MIT License — free to modify, fork, and enhance.
-
----
-
-## Author
-
-Made by iihn for ethical cybersecurity research and tooling development.  
-Contributions are welcome.
-
