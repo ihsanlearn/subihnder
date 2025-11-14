@@ -1,4 +1,4 @@
-# ihnsubfinder.py  
+# subihnder.py  
 High-Performance Asynchronous Subdomain Enumeration Toolkit  
 Single-file, fast, extensive, and designed for serious recon workflows.
 
@@ -6,7 +6,7 @@ Single-file, fast, extensive, and designed for serious recon workflows.
 
 ## Overview
 
-`ihnsubfinder.py` is a high-performance passive subdomain enumeration tool written in Python 3.10+.  
+`subihnder.py` is a high-performance passive subdomain enumeration tool written in Python 3.10+.  
 It focuses on:
 
 - High-speed asynchronous operations (asyncio + aiohttp)  
@@ -37,7 +37,7 @@ Includes the following providers:
 - Assetfinder (optional, if installed)
 
 ### Smart Caching System
-- Cache stored in `~/.cache/ihnsubfinder/`  
+- Cache stored in `~/.cache/subihnder/`  
 - Optional flags:  
   - `--no-cache` (disable cache completely)  
   - `--refresh` (force refresh per-domain)
@@ -71,8 +71,8 @@ Contains deduplicated, sanitized, sorted subdomains.
 ### 1. Clone Repository
 
 ```
-git clone https://github.com/<yourusername>/ihnsubfinder
-cd ihnsubfinder
+git clone https://github.com/<yourusername>/subihnder
+cd subihnder
 ```
 
 ### 2. Install Python Dependencies
@@ -107,37 +107,37 @@ They are not required, but useful for extended enumeration.
 ### Enumerate a Single Domain
 
 ```
-python3 ihnsubfinder.py -d example.com
+python3 subihnder.py -d example.com
 ```
 
 ### Read Domains from List File
 
 ```
-python3 ihnsubfinder.py -l domains.txt
+python3 subihnder.py -l domains.txt
 ```
 
 ### Increase Concurrency (default = 50)
 
 ```
-python3 ihnsubfinder.py -d example.com -p 200
+python3 subihnder.py -d example.com -p 200
 ```
 
 ### Disable Cache
 
 ```
-python3 ihnsubfinder.py -d example.com --no-cache
+python3 subihnder.py -d example.com --no-cache
 ```
 
 ### Force Refresh Cache
 
 ```
-python3 ihnsubfinder.py -d example.com --refresh
+python3 subihnder.py -d example.com --refresh
 ```
 
 ### Custom Output Filename
 
 ```
-python3 ihnsubfinder.py -d example.com -o results.txt
+python3 subihnder.py -d example.com -o results.txt
 ```
 
 ---
@@ -175,9 +175,9 @@ static.example.com
 ## Directory Structure
 
 ```
-ihnsubfinder/
+subihnder/
 │
-├── ihnsubfinder.py
+├── subihnder.py
 ├── requirements.txt
 └── README.md
 ```
