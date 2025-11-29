@@ -492,12 +492,11 @@ class Enumerator:
                     self._found_global.add(f)
             self._per_domain_counts[domain] = len(list(found))
             # print small live summary to stderr
-            total = len(self._found_global)
             dcount = len(self._per_domain_counts)
             if self.no_color or not COLOR_OK:
                 eprint(f"[*] {now_ts()} - Done {domain}: {self._per_domain_counts[domain]} found")
             else:
-                eprint(f"{colored('[*]', Fore.BLUE)} {colored(now_ts(), Fore.YELLOW)} - {colored(domain, Fore.GREEN)}: {colored(str(self._per_domain_counts[domain]), Fore.GREEN)} found  | Total unique: {colored(str(total), Fore.GREEN)}")
+                eprint(f"{colored('[*]', Fore.BLUE)} {colored(now_ts(), Fore.YELLOW)} - {colored(domain, Fore.GREEN)}: {colored(str(self._per_domain_counts[domain]), Fore.GREEN)} found")
 
 # -------------------------
 # CLI and main
