@@ -1,4 +1,5 @@
-<pre align="left">
+<div align="center">
+<pre>
             ___.   .__.__                .___            
   ________ _\_ |__ |__|  |__   ____    __| _/___________ 
  /  ___/  |  \ __ \|  |  |  \ /    \  / __ |/ __ \_  __ \
@@ -6,13 +7,14 @@
 /____  >____/|___  /__|___|  /___|  /\____ |\___  >__|   
      \/          \/        \/     \/      \/    \/       
 </pre>
+</div>
+
 <p align="center">
   <strong>High-Performance Asynchronous Subdomain Enumerator</strong>
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT">
-  <img src="https://img.shields.io/badge/Owner-Ihsan-red?style=for-the-badge" alt="Owner: iihhn">
   <img src="https://img.shields.io/badge/Async-Powered-purple?style=for-the-badge&logo=python" alt="Async Powered">
 </p>
 
