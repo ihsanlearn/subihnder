@@ -466,6 +466,8 @@ class Enumerator:
                     results.append(res)
         # normalize results
         normalized = set()
+
+        normalized.add(domain)
         for raw in results:
             # results might be JSON-ish lines or labeled lines like "[subfinder] host"
             # strip labels
@@ -474,7 +476,7 @@ class Enumerator:
             parts = re.split(r'[\s,;]+', cleaned)
             for p in parts:
                 cand = normalize_candidate(p)
-                if cand and (cand.endswith("." + domain) or cand == domain):
+                if cand and cand.endswith("." + domain):
                     normalized.add(cand)
         normalized_list = sorted(normalized)
         # save cache if requested
